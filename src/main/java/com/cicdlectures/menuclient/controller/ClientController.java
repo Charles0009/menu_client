@@ -80,7 +80,7 @@ public class ClientController implements Callable {
                 int id_menu2delete = this.deleting;
                 System.out.println(id_menu2delete);
                 var client = HttpClient.newHttpClient();
-                var request = HttpRequest.newBuilder(URI.create(this.url_server+"/"+{id_menu2delete}))
+                var request = HttpRequest.newBuilder(URI.create(this.url_server))
                         .DELETE()
                         .build();
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -88,6 +88,7 @@ public class ClientController implements Callable {
                 if (response.statusCode() != 200) {System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");}
                 else {System.out.println("Menu Retiré !");}   
         }
+
 
 
         @Override
