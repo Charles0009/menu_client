@@ -17,6 +17,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.Callable;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
+
 
 
 @Command(name = "menucli", mixinStandardHelpOptions = true, version = "menucli 1.0",
@@ -32,6 +34,12 @@ public class ClientController implements Callable {
         // Create a new menu 
         @Option(names = "add-menu" , description = "Menu to add",split=",")   
         private String[] adding;
+
+
+        // Create a new menu 
+        @Option(names = "delete-menu" , description = "Menu to delete")   
+        private int deleting = 0;
+
 
         // Transform the input in a json string wich can be understood by httprequest module (function CreateMenu)
         public String requete_to_string(String[] adding ){
@@ -50,6 +58,7 @@ public class ClientController implements Callable {
                                 menu = menu.substring(0, i) +  menu.substring(i+1); 
                         }
                 }
+                System.out.println(menu);
                 return menu;
         }
        
@@ -66,11 +75,28 @@ public class ClientController implements Callable {
                 else {System.out.println("Menu Ajouté !");}   
         }
 
+        public void deleteMenu () throws Exception {
+
+                int id_menu2delete = this.deleting;
+                System.out.println(id_menu2delete);
+                var client = HttpClient.newHttpClient();
+                var request = HttpRequest.newBuilder(URI.create(this.url_server+"/"+{id_menu2delete}))
+                        .DELETE()
+                        .build();
+                var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() != 200) {System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");}
+                else {System.out.println("Menu Retiré !");}   
+        }
+
 
         @Override
         public Integer call() throws Exception {
                 if (adding != null){
                         this.createMenu();
+                }
+                else if(deleting != 0){
+                        this.deleteMenu();
                 }
                 return null;
         }
