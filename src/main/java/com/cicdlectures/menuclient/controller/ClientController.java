@@ -26,8 +26,8 @@ public class ClientController implements Callable {
         //Menu server url 
         private String url_server = "https://menuserverheroku.herokuapp.com/menus";
 
-        @Option(names = "list-menus")
-        private String liste_menus;
+        @Option(names = "list-menus", description = "Display all menus",defaultValue = "yes")
+        private String liste_menus="d";
 
         // Create a new menu 
         @Option(names = "add-menu" , description = "Menu to add",split=",")   
@@ -67,10 +67,47 @@ public class ClientController implements Callable {
         }
 
 
+
+        public void listeMenus () throws Exception {
+              
+                var client = HttpClient.newHttpClient();
+        
+                var request = HttpRequest.newBuilder(URI.create(this.url_server ))
+                        .GET()
+                        .header("Content-type", "application/json")
+                        .build();
+             
+                var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                JSONArray array = new JSONArray(response.body());
+                
+                char res = liste_menus.charAt(1);
+                if (res == 'a') {
+                        for (int i = 0; i <  array.length(); i++) {
+
+                                JSONObject plat = array.getJSONObject(i);
+                                System.out.println( plat.getInt("id") + " - "+ plat.getString("name"));
+                                JSONArray dishes = plat.getJSONArray("dishes");
+
+                                for (int j = 0; j <  dishes.length(); j++){
+                                        System.out.println( " - " + dishes.getJSONObject(j).getString("name") );
+                                }
+                                System.out.println( "\n ------------------ \n ");
+                        }
+                }
+                else{ 
+                        System.out.println("You have to run 'list-menus -a' to display the menus !");
+                }
+                
+        }
+
+
         @Override
         public Integer call() throws Exception {
                 if (adding != null){
                         this.createMenu();
+                }
+                if (liste_menus != null){
+                        this.listeMenus();
                 }
                 return null;
         }
@@ -80,4 +117,3 @@ public class ClientController implements Callable {
               }
 
 }
-
