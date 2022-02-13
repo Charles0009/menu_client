@@ -76,7 +76,7 @@ public class ClientController implements Callable {
         }
 
         public void deleteMenu () throws Exception {
-
+                String menu = requete_to_string(adding);
                 int id_menu2delete = this.deleting;
                 System.out.println(id_menu2delete);
                 var client = HttpClient.newHttpClient();
