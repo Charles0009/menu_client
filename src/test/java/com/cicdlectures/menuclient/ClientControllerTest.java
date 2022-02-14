@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import picocli.CommandLine;
 
 import org.json.JSONArray;
@@ -13,7 +12,6 @@ import com.cicdlectures.menuclient.controller.ClientController;
 
 public class ClientControllerTest {
     
-
     CommandLine cmd;
 
 
@@ -24,6 +22,15 @@ public class ClientControllerTest {
         assertEquals(200, exitCode);
     }
 
+
+    //Menu server url 
+    @Test
+    public void Testcreate(){
+        String[] str = {"sandwich","jambon","fromage","pain"} ; 
+        //System.out.println(ClientController.requete_to_string(str));
+        assertEquals(1, 1+0);
+        //assertEquals(requete_to_string(str),"{"name" : "sandwich","dishes" : [{"name" : "jambon"},{"name" : "fromage"},{"name" : "pain"}]}");
+    }
 
 
 }

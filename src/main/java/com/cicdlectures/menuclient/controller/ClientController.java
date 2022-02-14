@@ -28,21 +28,24 @@ public class ClientController implements Callable {
         //Menu server url 
         private String url_server = "https://menuserverheroku.herokuapp.com/menus";
 
-        @Option(names = "list-menus")
+        @Option(names = "list-menus", description = "Display all menus")
         private String liste_menus;
 
         // Create a new menu 
         @Option(names = "add-menu" , description = "Menu to add",split=",")   
         private String[] adding;
 
-
-        // Create a new menu 
+        // Delete a menu 
         @Option(names = "delete-menu" , description = "Menu to delete")   
         private int deleting = 0;
 
+        // Create a new menu 
+        @Option(names = "--server-url" , description = "Menu to add")   
+        private String new_url;
+
 
         // Transform the input in a json string wich can be understood by httprequest module (function CreateMenu)
-        public String requete_to_string(String[] adding ){
+        public static String requete_to_string(String[] adding ){
 
                 ArrayList<String> ingredients = new ArrayList<String>(); 
                 for (int i =1 ; i<adding.length ; i++) {
@@ -91,14 +94,61 @@ public class ClientController implements Callable {
 
 
 
+
+        public void listeMenus () throws Exception {
+              
+                var client = HttpClient.newHttpClient();
+        
+                var request = HttpRequest.newBuilder(URI.create(this.url_server ))
+                        .GET()
+                        .header("Content-type", "application/json")
+                        .build();
+             
+                var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                JSONArray array = new JSONArray(response.body());
+                
+                char res = liste_menus.charAt(1);
+                if (res == 'a') {
+                        for (int i = 0; i <  array.length(); i++) {
+
+                                JSONObject plat = array.getJSONObject(i);
+                                System.out.println( plat.getInt("id") + " - "+ plat.getString("name"));
+                                JSONArray dishes = plat.getJSONArray("dishes");
+
+                                for (int j = 0; j <  dishes.length(); j++){
+                                        System.out.println( " - " + dishes.getJSONObject(j).getString("name") );
+                                }
+                                System.out.println( "\n ------------------ \n ");
+                        }
+                }
+                else{ 
+                        System.out.println("You have to run 'list-menus -a' to display the menus !");
+                }
+                
+        }
+
+        public void changeURL(){
+                this.url_server = new_url ; 
+                
+        }
+
         @Override
         public Integer call() throws Exception {
-                if (adding != null){
+                if (new_url != null){
+                        this.changeURL();
+                }
+        
+                else if (adding != null){
                         this.createMenu();
                 }
                 else if(deleting != 0){
                         this.deleteMenu();
                 }
+
+                else if (liste_menus != null){
+                        this.listeMenus();
+                }
+                
                 return null;
         }
 
@@ -107,4 +157,3 @@ public class ClientController implements Callable {
               }
 
 }
-
