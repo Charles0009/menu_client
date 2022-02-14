@@ -1,3 +1,7 @@
+on:
+  push:
+
+name: CD
 jobs :
   release: 
       needs: build
