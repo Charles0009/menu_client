@@ -26,15 +26,19 @@ public class ClientController implements Callable {
         //Menu server url 
         private String url_server = "https://menuserverheroku.herokuapp.com/menus";
 
-        @Option(names = "list-menus", description = "Display all menus",defaultValue = "yes")
-        private String liste_menus="d";
+        @Option(names = "list-menus", description = "Display all menus")
+        private String liste_menus;
 
         // Create a new menu 
         @Option(names = "add-menu" , description = "Menu to add",split=",")   
         private String[] adding;
 
+        // Create a new menu 
+        @Option(names = "--server-url" , description = "Menu to add")   
+        private String new_url;
+
         // Transform the input in a json string wich can be understood by httprequest module (function CreateMenu)
-        public String requete_to_string(String[] adding ){
+        public static String requete_to_string(String[] adding ){
 
                 ArrayList<String> ingredients = new ArrayList<String>(); 
                 for (int i =1 ; i<adding.length ; i++) {
@@ -100,15 +104,24 @@ public class ClientController implements Callable {
                 
         }
 
+        public void changeURL(){
+                this.url_server = new_url ; 
+                
+        }
 
         @Override
         public Integer call() throws Exception {
+                if (new_url != null){
+                        this.changeURL();
+                }
+        
                 if (adding != null){
                         this.createMenu();
                 }
                 if (liste_menus != null){
                         this.listeMenus();
                 }
+                
                 return null;
         }
 
