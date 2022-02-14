@@ -76,15 +76,15 @@ public class ClientController implements Callable {
         }
 
         public void deleteMenu () throws Exception {
-                String menu = requete_to_string(adding);
+                //String menu = requete_to_string(adding);
                 int id_menu2delete = this.deleting;
                 System.out.println(id_menu2delete);
                 var client = HttpClient.newHttpClient();
-                var request = HttpRequest.newBuilder(URI.create(this.url_server))
+                var request = HttpRequest.newBuilder(URI.create(this.url_server + "/" + id_menu2delete))
                         .DELETE()
                         .build();
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
+                
                 if (response.statusCode() != 200) {System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");}
                 else {System.out.println("Menu Retiré !");}   
         }
