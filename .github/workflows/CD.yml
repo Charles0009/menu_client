@@ -1,7 +1,5 @@
-on:
-  push:
-
-name: CD
+name: CI
+on: [push, pull_request]
 jobs :
   release: 
       needs: build
