@@ -15,22 +15,22 @@ public class ClientControllerTest {
     CommandLine cmd;
 
 
-    @Test
-    @DisplayName("delete a menu")
-    public void Testdelete() {
-        int exitCode = cmd.execute("delete-menu", "1");
-        assertEquals(200, exitCode);
-    }
+    // @Test
+    // @DisplayName("delete a menu")
+    // public void Testdelete() {
+    //     int exitCode = cmd.execute("delete-menu", "1");
+    //     assertEquals(200, exitCode);
+    // }
 
 
-    //Menu server url 
-    @Test
-    public void Testcreate(){
-        String[] str = {"sandwich","jambon","fromage","pain"} ; 
-        //System.out.println(ClientController.requete_to_string(str));
-        assertEquals(1, 1+0);
-        //assertEquals(requete_to_string(str),"{"name" : "sandwich","dishes" : [{"name" : "jambon"},{"name" : "fromage"},{"name" : "pain"}]}");
-    }
+    // //Menu server url 
+    // @Test
+    // public void Testcreate(){
+    //     String[] str = {"sandwich","jambon","fromage","pain"} ; 
+    //     //System.out.println(ClientController.requete_to_string(str));
+    //     assertEquals(1, 1+0);
+    //     //assertEquals(requete_to_string(str),"{"name" : "sandwich","dishes" : [{"name" : "jambon"},{"name" : "fromage"},{"name" : "pain"}]}");
+    // }
 
 
 }
