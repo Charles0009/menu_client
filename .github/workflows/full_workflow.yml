@@ -21,16 +21,6 @@ jobs:
           name: menu-client
           path: target/menu-client.jar
 
-  release-heroku: 
-    needs: build
-    if: contains(github.ref , 'refs/tags/v')
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: menu-client
-          path: ./releaseAsset/
-
 
   release: 
     needs: build
