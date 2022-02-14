@@ -17,6 +17,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.Callable;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
+
 
 
 @Command(name = "menucli", mixinStandardHelpOptions = true, version = "menucli 1.0",
@@ -33,9 +35,14 @@ public class ClientController implements Callable {
         @Option(names = "add-menu" , description = "Menu to add",split=",")   
         private String[] adding;
 
+        // Delete a menu 
+        @Option(names = "delete-menu" , description = "Menu to delete")   
+        private int deleting = 0;
+
         // Create a new menu 
         @Option(names = "--server-url" , description = "Menu to add")   
         private String new_url;
+
 
         // Transform the input in a json string wich can be understood by httprequest module (function CreateMenu)
         public static String requete_to_string(String[] adding ){
@@ -54,6 +61,7 @@ public class ClientController implements Callable {
                                 menu = menu.substring(0, i) +  menu.substring(i+1); 
                         }
                 }
+                System.out.println(menu);
                 return menu;
         }
        
@@ -69,6 +77,21 @@ public class ClientController implements Callable {
                 if (response.statusCode() != 201) {System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");}
                 else {System.out.println("Menu Ajouté !");}   
         }
+
+        public void deleteMenu () throws Exception {
+                //String menu = requete_to_string(adding);
+                int id_menu2delete = this.deleting;
+                System.out.println(id_menu2delete);
+                var client = HttpClient.newHttpClient();
+                var request = HttpRequest.newBuilder(URI.create(this.url_server + "/" + id_menu2delete))
+                        .DELETE()
+                        .build();
+                var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                
+                if (response.statusCode() != 200) {System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");}
+                else {System.out.println("Menu Retiré !");}   
+        }
+
 
 
 
@@ -115,10 +138,14 @@ public class ClientController implements Callable {
                         this.changeURL();
                 }
         
-                if (adding != null){
+                else if (adding != null){
                         this.createMenu();
                 }
-                if (liste_menus != null){
+                else if(deleting != 0){
+                        this.deleteMenu();
+                }
+
+                else if (liste_menus != null){
                         this.listeMenus();
                 }
                 
