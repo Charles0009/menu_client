@@ -38,7 +38,7 @@ public class ClientController implements Callable {
         private String new_url;
 
         // Transform the input in a json string wich can be understood by httprequest module (function CreateMenu)
-        public String requete_to_string(String[] adding ){
+        public static String requete_to_string(String[] adding ){
 
                 ArrayList<String> ingredients = new ArrayList<String>(); 
                 for (int i =1 ; i<adding.length ; i++) {
